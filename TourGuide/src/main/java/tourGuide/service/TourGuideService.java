@@ -20,6 +20,8 @@ import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
+import tourGuide.dto.NearByAttractionDTO;
+import tourGuide.dto.UserNearestAttractionDTO;
 import tourGuide.helper.InternalTestHelper;
 import tourGuide.tracker.Tracker;
 import tourGuide.user.User;
@@ -89,15 +91,34 @@ public class TourGuideService {
 		return visitedLocation;
 	}
 
-	public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
-		List<Attraction> nearbyAttractions = new ArrayList<>();
-		for(Attraction attraction : gpsUtil.getAttractions()) {
-			if(rewardsService.isWithinAttractionProximity(attraction, visitedLocation.location)) {
-				nearbyAttractions.add(attraction);
-			}
-		}
-		
-		return nearbyAttractions;
+	/**
+	 * Get the user location and the five the nearest attractions of the
+	 * position of the user.
+	 * @param user
+	 * @return Return each information in UserNearestAttractionDTO
+	 */
+	public UserNearestAttractionDTO getNearByAttractions(User user) {
+		VisitedLocation visitedLocation = getUserLocation(user);
+
+		List<NearByAttractionDTO> nearestAttraction =
+						gpsUtil.getAttractions().stream()
+						// Create a map, key = attraction / value = distance
+						// between attraction location and user location
+						.collect(Collectors.toMap(a -> a,
+						a -> rewardsService.getDistance(new Location(a.latitude, a.longitude), visitedLocation.location)))
+						.entrySet().stream()
+						// Sort by distance
+						.sorted(Map.Entry.comparingByValue())
+						.limit(5)
+						// Map these five result to NearByAttractionDTO
+						.map(attractionDistance ->
+								new NearByAttractionDTO(attractionDistance.getKey().attractionName
+										, new Location(attractionDistance.getKey().latitude, attractionDistance.getKey().longitude)
+										, attractionDistance.getValue()
+										, rewardsService.getRewardPoints(attractionDistance.getKey()
+										, user)))
+						.collect(Collectors.toList());
+		return new UserNearestAttractionDTO(visitedLocation.location, nearestAttraction);
 	}
 	
 	private void addShutDownHook() {

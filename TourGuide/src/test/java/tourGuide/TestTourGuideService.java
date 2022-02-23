@@ -15,6 +15,8 @@ import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
+import tourGuide.dto.NearByAttractionDTO;
+import tourGuide.dto.UserNearestAttractionDTO;
 import tourGuide.helper.InternalTestHelper;
 import tourGuide.service.RewardsService;
 import tourGuide.service.TourGuideService;
@@ -99,7 +101,7 @@ public class TestTourGuideService {
 		assertEquals(user.getUserId(), visitedLocation.userId);
 	}
 	
-	@Ignore // Not yet implemented
+	//@Ignore // Not yet implemented
 	@Test
 	public void getNearbyAttractions() {
 		GpsUtil gpsUtil = new GpsUtil();
@@ -108,13 +110,13 @@ public class TestTourGuideService {
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 		
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-		VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
 		
-		List<Attraction> attractions = tourGuideService.getNearByAttractions(visitedLocation);
+		UserNearestAttractionDTO userNearestAttraction =
+				tourGuideService.getNearByAttractions(user);
 		
 		tourGuideService.tracker.stopTracking();
 		
-		assertEquals(5, attractions.size());
+		assertEquals(5, userNearestAttraction.getNearestAttraction().size());
 	}
 	
 	public void getTripDeals() {
