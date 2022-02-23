@@ -111,14 +111,22 @@ public class TourGuideService {
 						.sorted(Map.Entry.comparingByValue())
 						.limit(5)
 						// Map these five result to NearByAttractionDTO
-						.map(attractionDistance ->
-								new NearByAttractionDTO(attractionDistance.getKey().attractionName
-										, new Location(attractionDistance.getKey().latitude, attractionDistance.getKey().longitude)
-										, attractionDistance.getValue()
-										, rewardsService.getRewardPoints(attractionDistance.getKey()
+						.map(entry ->
+								new NearByAttractionDTO(entry.getKey().attractionName
+										, new Location(entry.getKey().latitude, entry.getKey().longitude)
+										, entry.getValue()
+										, rewardsService.getRewardPoints(entry.getKey()
 										, user)))
 						.collect(Collectors.toList());
 		return new UserNearestAttractionDTO(visitedLocation.location, nearestAttraction);
+	}
+
+	public Map<UUID, Location> getAllCurrentLocations() {
+		return getAllUsers().stream()
+				.collect(Collectors.toMap(User::getUserId,
+						user -> (user.getVisitedLocations().isEmpty()) ?
+								new Location(0, 0) :
+								user.getLastVisitedLocation().location));
 	}
 	
 	private void addShutDownHook() {
