@@ -37,7 +37,8 @@ public class TestTourGuideService {
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 		
-		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide" +
+				".com", null);
 		VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
 		tourGuideService.tracker.stopTracking();
 		assertTrue(visitedLocation.userId.equals(user.getUserId()));
@@ -50,8 +51,10 @@ public class TestTourGuideService {
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 		
-		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-		User user2 = new User(UUID.randomUUID(), "jon2", "000", "jon2@tourGuide.com");
+		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide" +
+				".com", null);
+		User user2 = new User(UUID.randomUUID(), "jon2", "000", "jon2" +
+				"@tourGuide.com", null);
 
 		tourGuideService.addUser(user);
 		tourGuideService.addUser(user2);
@@ -72,8 +75,10 @@ public class TestTourGuideService {
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 		
-		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-		User user2 = new User(UUID.randomUUID(), "jon2", "000", "jon2@tourGuide.com");
+		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide" +
+				".com", null);
+		User user2 = new User(UUID.randomUUID(), "jon2", "000", "jon2" +
+				"@tourGuide.com", null);
 
 		tourGuideService.addUser(user);
 		tourGuideService.addUser(user2);
@@ -93,7 +98,8 @@ public class TestTourGuideService {
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 		
-		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide" +
+				".com", null);
 		VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
 		
 		tourGuideService.tracker.stopTracking();
@@ -109,7 +115,8 @@ public class TestTourGuideService {
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 		
-		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide" +
+				".com", null);
 		
 		UserNearestAttractionDTO userNearestAttraction =
 				tourGuideService.getNearByAttractions(user);
@@ -125,7 +132,8 @@ public class TestTourGuideService {
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 		
-		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide" +
+				".com", null);
 
 		List<Provider> providers = tourGuideService.getTripDeals(user);
 		

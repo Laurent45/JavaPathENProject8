@@ -19,6 +19,7 @@ import tourGuide.dto.UserNearestAttractionDTO;
 import tourGuide.helper.InternalTestHelper;
 import tourGuide.tracker.Tracker;
 import tourGuide.user.User;
+import tourGuide.user.UserPreferences;
 import tourGuide.user.UserReward;
 import tripPricer.Provider;
 import tripPricer.TripPricer;
@@ -190,7 +191,8 @@ public class TourGuideService {
 			String userName = "internalUser" + i;
 			String phone = "000";
 			String email = userName + "@tourGuide.com";
-			User user = new User(UUID.randomUUID(), userName, phone, email);
+			User user = new User(UUID.randomUUID(), userName, phone, email,
+					new UserPreferences(1, 1, 1, 1));
 			generateUserLocationHistory(user);
 			
 			internalUserMap.put(userName, user);
