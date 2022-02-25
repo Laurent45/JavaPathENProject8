@@ -27,7 +27,8 @@ import tripPricer.TripPricer;
 public class TourGuideService {
 	private Logger logger = LoggerFactory.getLogger(TourGuideService.class);
 
-	private static int numberOfThreads = 1000;
+	private static final int NUMBER_OF_THREAD = 1000;
+
 	private final GpsUtil gpsUtil;
 	private final RewardsService rewardsService;
 	private final TripPricer tripPricer = new TripPricer();
@@ -49,14 +50,6 @@ public class TourGuideService {
 
 	public List<UserReward> getUserRewards(User user) {
 		return user.getUserRewards();
-	}
-
-	public static int getNumberOfThreads() {
-		return numberOfThreads;
-	}
-
-	public static void setNumberOfThreads(int numberOfThreads) {
-		TourGuideService.numberOfThreads = numberOfThreads;
 	}
 
 	public VisitedLocation getUserLocation(User user) {
@@ -101,7 +94,7 @@ public class TourGuideService {
 	 * @return A list of visitedLocation
 	 */
 	public List<VisitedLocation> trackAllUserLocation(List<User> users) {
-		ExecutorService es = Executors.newFixedThreadPool(numberOfThreads);
+		ExecutorService es = Executors.newFixedThreadPool(NUMBER_OF_THREAD);
 		List<Callable<VisitedLocation>> tasks = new ArrayList<>();
 		// Create a task for each user.
 		users.forEach(user -> tasks.add(() -> trackUserLocation(user)));

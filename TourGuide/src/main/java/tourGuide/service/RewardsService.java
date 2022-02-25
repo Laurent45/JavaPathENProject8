@@ -11,10 +11,15 @@ import tourGuide.user.UserReward;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Service
 public class RewardsService {
     private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
+	private static final int NUMBER_OF_THREAD = 1000;
 
 	// proximity in miles
     private int defaultProximityBuffer = 10;
@@ -50,6 +55,29 @@ public class RewardsService {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Use ExecutorService in order to run many times calculate rewards with
+	 * multi-threading.
+	 * @param users list of users
+	 */
+	public void calculateRewardsUsers(List<User> users) {
+		ExecutorService es = Executors.newFixedThreadPool(NUMBER_OF_THREAD);
+		List<Runnable> tasks = new ArrayList<>();
+		users.forEach(user -> tasks.add(() -> calculateRewards(user)));
+
+		List<Future<?>> futures = new ArrayList<>();
+		tasks.forEach(task -> futures.add(es.submit(task)));
+		futures.parallelStream().forEach(future -> {
+			try {
+				future.get();
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+				Thread.currentThread().interrupt();
+			}
+		});
+		es.shutdown();
 	}
 	
 	public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
