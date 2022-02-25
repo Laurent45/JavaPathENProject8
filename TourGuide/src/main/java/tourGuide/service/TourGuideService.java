@@ -2,13 +2,8 @@ package tourGuide.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -17,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import gpsUtil.GpsUtil;
-import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import tourGuide.dto.NearByAttractionDTO;
@@ -32,16 +26,17 @@ import tripPricer.TripPricer;
 @Service
 public class TourGuideService {
 	private Logger logger = LoggerFactory.getLogger(TourGuideService.class);
+
+	private static int numberOfThreads = 1000;
 	private final GpsUtil gpsUtil;
 	private final RewardsService rewardsService;
 	private final TripPricer tripPricer = new TripPricer();
 	public final Tracker tracker;
 	boolean testMode = true;
-	
 	public TourGuideService(GpsUtil gpsUtil, RewardsService rewardsService) {
 		this.gpsUtil = gpsUtil;
 		this.rewardsService = rewardsService;
-		
+
 		if(testMode) {
 			logger.info("TestMode enabled");
 			logger.debug("Initializing users");
@@ -51,18 +46,26 @@ public class TourGuideService {
 		tracker = new Tracker(this);
 		addShutDownHook();
 	}
-	
+
 	public List<UserReward> getUserRewards(User user) {
 		return user.getUserRewards();
 	}
-	
+
+	public static int getNumberOfThreads() {
+		return numberOfThreads;
+	}
+
+	public static void setNumberOfThreads(int numberOfThreads) {
+		TourGuideService.numberOfThreads = numberOfThreads;
+	}
+
 	public VisitedLocation getUserLocation(User user) {
 		VisitedLocation visitedLocation = (user.getVisitedLocations().size() > 0) ?
 			user.getLastVisitedLocation() :
 			trackUserLocation(user);
 		return visitedLocation;
 	}
-	
+
 	public User getUser(String userName) {
 		return internalUserMap.get(userName);
 	}
@@ -89,6 +92,45 @@ public class TourGuideService {
 		VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
 		user.addToVisitedLocations(visitedLocation);
 		return visitedLocation;
+	}
+
+	/**
+	 * Track all users' location. Use an executor service with a pool thread
+	 * which invoke trackUserLocation.
+	 * @param users List of users
+	 * @return A list of visitedLocation
+	 */
+	public List<VisitedLocation> trackAllUserLocation(List<User> users) {
+		ExecutorService es = Executors.newFixedThreadPool(numberOfThreads);
+		List<Callable<VisitedLocation>> tasks = new ArrayList<>();
+		// Create a task for each user.
+		users.forEach(user -> tasks.add(() -> trackUserLocation(user)));
+
+		// Invoke each task.
+		List<Future<VisitedLocation>> listFuture = null;
+		try {
+			listFuture = es.invokeAll(tasks);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			Thread.currentThread().interrupt();
+		}
+
+		// Get each result of tasks and return it
+		List<VisitedLocation> locations =
+				Objects.requireNonNull(listFuture).stream()
+				.map(visitedLocationFuture -> {
+					try {
+						return visitedLocationFuture.get();
+					} catch (InterruptedException | ExecutionException e) {
+						e.printStackTrace();
+						Thread.currentThread().interrupt();
+					}
+					return null;
+				})
+				.collect(Collectors.toList());
+
+		es.shutdown();
+		return locations;
 	}
 
 	/**
@@ -121,6 +163,11 @@ public class TourGuideService {
 		return new UserNearestAttractionDTO(visitedLocation.location, nearestAttraction);
 	}
 
+	/**
+	 * A stream of all user is created in order to map to a map with the key
+	 * is userId and the value is the location's user.
+	 * @return a map<userId / location's user>
+	 */
 	public Map<UUID, Location> getAllCurrentLocations() {
 		return getAllUsers().stream()
 				.collect(Collectors.toMap(User::getUserId,
