@@ -1,13 +1,13 @@
 package tourGuide.service;
 
-import gpsUtil.GpsUtil;
-import gpsUtil.location.Attraction;
-import gpsUtil.location.Location;
-import gpsUtil.location.VisitedLocation;
+import microservices.GpsUtilService;
 import org.springframework.stereotype.Service;
 import rewardCentral.RewardCentral;
-import tourGuide.user.User;
-import tourGuide.user.UserReward;
+import tourGuide.model.gpsUtil.Attraction;
+import tourGuide.model.gpsUtil.Location;
+import tourGuide.model.gpsUtil.VisitedLocation;
+import tourGuide.model.user.User;
+import tourGuide.model.user.UserReward;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +25,10 @@ public class RewardsService {
     private int defaultProximityBuffer = 10;
 	private int proximityBuffer = defaultProximityBuffer;
 	private int attractionProximityRange = 200;
-	private final GpsUtil gpsUtil;
+	private final GpsUtilService gpsUtil;
 	private final RewardCentral rewardsCentral;
 	
-	public RewardsService(GpsUtil gpsUtil, RewardCentral rewardCentral) {
+	public RewardsService(GpsUtilService gpsUtil, RewardCentral rewardCentral) {
 		this.gpsUtil = gpsUtil;
 		this.rewardsCentral = rewardCentral;
 	}

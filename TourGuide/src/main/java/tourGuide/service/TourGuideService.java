@@ -1,5 +1,21 @@
 package tourGuide.service;
 
+import microservices.GpsUtilService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import tourGuide.dto.NearByAttractionDTO;
+import tourGuide.dto.UserNearestAttractionDTO;
+import tourGuide.helper.InternalTestHelper;
+import tourGuide.model.gpsUtil.Location;
+import tourGuide.model.gpsUtil.VisitedLocation;
+import tourGuide.model.user.User;
+import tourGuide.model.user.UserPreferences;
+import tourGuide.model.user.UserReward;
+import tourGuide.tracker.Tracker;
+import tripPricer.Provider;
+import tripPricer.TripPricer;
+
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
@@ -7,35 +23,18 @@ import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
-import gpsUtil.GpsUtil;
-import gpsUtil.location.Location;
-import gpsUtil.location.VisitedLocation;
-import tourGuide.dto.NearByAttractionDTO;
-import tourGuide.dto.UserNearestAttractionDTO;
-import tourGuide.helper.InternalTestHelper;
-import tourGuide.tracker.Tracker;
-import tourGuide.user.User;
-import tourGuide.user.UserPreferences;
-import tourGuide.user.UserReward;
-import tripPricer.Provider;
-import tripPricer.TripPricer;
-
 @Service
 public class TourGuideService {
 	private Logger logger = LoggerFactory.getLogger(TourGuideService.class);
 
 	private static final int NUMBER_OF_THREAD = 1000;
 
-	private final GpsUtil gpsUtil;
+	private final GpsUtilService gpsUtil;
 	private final RewardsService rewardsService;
 	private final TripPricer tripPricer = new TripPricer();
 	public final Tracker tracker;
 	boolean testMode = true;
-	public TourGuideService(GpsUtil gpsUtil, RewardsService rewardsService) {
+	public TourGuideService(GpsUtilService gpsUtil, RewardsService rewardsService) {
 		this.gpsUtil = gpsUtil;
 		this.rewardsService = rewardsService;
 
@@ -54,7 +53,8 @@ public class TourGuideService {
 	}
 
 	public VisitedLocation getUserLocation(User user) {
-		VisitedLocation visitedLocation = (user.getVisitedLocations().size() > 0) ?
+		VisitedLocation visitedLocation =
+				(user.getVisitedLocations().size() > 0) ?
 			user.getLastVisitedLocation() :
 			trackUserLocation(user);
 		return visitedLocation;
