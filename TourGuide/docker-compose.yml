@@ -1,0 +1,6 @@
+version: "3"
+services:
+   gps-util:
+     build: ~/Dev/OC/P8_gpsUtil/
+     ports:
+       - "127.0.0.1:8081:8080"
