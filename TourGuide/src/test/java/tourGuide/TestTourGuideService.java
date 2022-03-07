@@ -8,11 +8,11 @@ import java.util.Locale;
 import java.util.UUID;
 
 import microservices.GpsUtilService;
+import microservices.RewardCentralService;
 import org.junit.Before;
 import org.junit.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import rewardCentral.RewardCentral;
 import tourGuide.dto.UserNearestAttractionDTO;
 import tourGuide.helper.InternalTestHelper;
 import tourGuide.model.gpsUtil.VisitedLocation;
@@ -25,6 +25,8 @@ public class TestTourGuideService {
 
 	@Autowired
 	private GpsUtilService gpsUtil;
+	@Autowired
+	private RewardCentralService rewardCentralService;
 
 	@Before
 	public void setUp() {
@@ -33,7 +35,7 @@ public class TestTourGuideService {
 
 	@Test
 	public void getUserLocation() {
-		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+		RewardsService rewardsService = new RewardsService(gpsUtil, rewardCentralService);
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 		
@@ -46,7 +48,7 @@ public class TestTourGuideService {
 	
 	@Test
 	public void addUser() {
-		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+		RewardsService rewardsService = new RewardsService(gpsUtil, rewardCentralService);
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 		
@@ -69,7 +71,7 @@ public class TestTourGuideService {
 	
 	@Test
 	public void getAllUsers() {
-		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+		RewardsService rewardsService = new RewardsService(gpsUtil, rewardCentralService);
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 		
@@ -91,7 +93,7 @@ public class TestTourGuideService {
 	
 	@Test
 	public void trackUser() {
-		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+		RewardsService rewardsService = new RewardsService(gpsUtil, rewardCentralService);
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 		
@@ -106,7 +108,7 @@ public class TestTourGuideService {
 
 	@Test
 	public void getNearbyAttractions() {
-		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+		RewardsService rewardsService = new RewardsService(gpsUtil, rewardCentralService);
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 		
@@ -122,7 +124,7 @@ public class TestTourGuideService {
 	}
 	
 	public void getTripDeals() {
-		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+		RewardsService rewardsService = new RewardsService(gpsUtil, rewardCentralService);
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 		

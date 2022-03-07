@@ -1,6 +1,13 @@
 version: "3"
 services:
-   gps-util:
-     build: ~/Dev/OC/P8_gpsUtil/
-     ports:
-       - "127.0.0.1:8081:8080"
+  gps-util:
+    container_name: gpsUtil
+    build: ~/Dev/OC/P8_gpsUtil/
+    ports:
+      - "127.0.0.1:8081:8080"
+  reward-central:
+    container_name: rewardCentral
+    build: ~/Dev/OC/P8_rewardCentral/
+    ports:
+      - "127.0.0.1:8082:8080"
+

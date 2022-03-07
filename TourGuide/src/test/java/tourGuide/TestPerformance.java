@@ -1,28 +1,33 @@
 package tourGuide;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-
 import microservices.GpsUtilService;
+import microservices.RewardCentralService;
 import org.apache.commons.lang3.time.StopWatch;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import rewardCentral.RewardCentral;
 import tourGuide.helper.InternalTestHelper;
 import tourGuide.model.gpsUtil.Attraction;
 import tourGuide.model.gpsUtil.VisitedLocation;
+import tourGuide.model.user.User;
 import tourGuide.service.RewardsService;
 import tourGuide.service.TourGuideService;
-import tourGuide.model.user.User;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertTrue;
 
 public class TestPerformance {
 
 	@Autowired
 	GpsUtilService gpsUtil;
+
+	@Autowired
+	RewardCentralService rewardCentralService;
 
 	@Before
 	public void setUp() throws Exception {
@@ -51,7 +56,7 @@ public class TestPerformance {
 
 	@Test
 	public void highVolumeTrackLocation() {
-		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+		RewardsService rewardsService = new RewardsService(gpsUtil, rewardCentralService);
 		// Users should be incremented up to 100,000, and test finishes within 15 minutes
 		InternalTestHelper.setInternalUserNumber(100000);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
@@ -71,7 +76,7 @@ public class TestPerformance {
 
 	@Test
 	public void highVolumeGetRewards() {
-		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+		RewardsService rewardsService = new RewardsService(gpsUtil, rewardCentralService);
 
 		// Users should be incremented up to 100,000, and test finishes within 20 minutes
 		InternalTestHelper.setInternalUserNumber(100);

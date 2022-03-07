@@ -1,8 +1,8 @@
 package tourGuide.service;
 
 import microservices.GpsUtilService;
+import microservices.RewardCentralService;
 import org.springframework.stereotype.Service;
-import rewardCentral.RewardCentral;
 import tourGuide.model.gpsUtil.Attraction;
 import tourGuide.model.gpsUtil.Location;
 import tourGuide.model.gpsUtil.VisitedLocation;
@@ -11,6 +11,7 @@ import tourGuide.model.user.UserReward;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,9 +27,10 @@ public class RewardsService {
 	private int proximityBuffer = defaultProximityBuffer;
 	private int attractionProximityRange = 200;
 	private final GpsUtilService gpsUtil;
-	private final RewardCentral rewardsCentral;
+	private final RewardCentralService rewardsCentral;
 	
-	public RewardsService(GpsUtilService gpsUtil, RewardCentral rewardCentral) {
+	public RewardsService(GpsUtilService gpsUtil,
+						  RewardCentralService rewardCentral) {
 		this.gpsUtil = gpsUtil;
 		this.rewardsCentral = rewardCentral;
 	}
@@ -89,7 +91,9 @@ public class RewardsService {
 	}
 	
 	public int getRewardPoints(Attraction attraction, User user) {
-		return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
+		return Optional.ofNullable(rewardsCentral.getAttractionRewardPoints(
+				String.valueOf(attraction.attractionId)
+				, String.valueOf(user.getUserId())).getBody()).orElse(0);
 	}
 	
 	public double getDistance(Location loc1, Location loc2) {
