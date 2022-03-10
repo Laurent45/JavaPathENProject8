@@ -1,7 +1,5 @@
 package tourGuide.controller;
 
-import com.jsoniter.output.JsonStream;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -9,9 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 import tourGuide.dto.UserNearestAttractionDTO;
 import tourGuide.model.gpsUtil.Location;
 import tourGuide.model.gpsUtil.VisitedLocation;
+import tourGuide.model.tripPricer.Provider;
 import tourGuide.model.user.User;
+import tourGuide.model.user.UserReward;
 import tourGuide.service.TourGuideService;
-import tripPricer.Provider;
 
 import java.util.List;
 import java.util.Map;
@@ -20,18 +19,21 @@ import java.util.UUID;
 @RestController
 public class TourGuideController {
 
-	@Autowired
-	TourGuideService tourGuideService;
-	
+	private final TourGuideService tourGuideService;
+
+    public TourGuideController(TourGuideService tourGuideService) {
+        this.tourGuideService = tourGuideService;
+    }
+
     @RequestMapping("/")
     public String index() {
         return "Greetings from TourGuide!";
     }
     
     @RequestMapping("/getLocation") 
-    public String getLocation(@RequestParam String userName) {
+    public Location getLocation(@RequestParam String userName) {
     	VisitedLocation visitedLocation = tourGuideService.getUserLocation(getUser(userName));
-		return JsonStream.serialize(visitedLocation.location);
+		return visitedLocation.location;
     }
 
     @RequestMapping("/getNearbyAttractions") 
@@ -41,8 +43,8 @@ public class TourGuideController {
     }
     
     @RequestMapping("/getRewards") 
-    public String getRewards(@RequestParam String userName) {
-    	return JsonStream.serialize(tourGuideService.getUserRewards(getUser(userName)));
+    public List<UserReward> getRewards(@RequestParam String userName) {
+    	return tourGuideService.getUserRewards(getUser(userName));
     }
     
     @RequestMapping("/getAllCurrentLocations")
@@ -51,9 +53,11 @@ public class TourGuideController {
     }
     
     @RequestMapping("/getTripDeals")
-    public String getTripDeals(@RequestParam String userName) {
+    public ResponseEntity<List<Provider>> getTripDeals(@RequestParam String userName) {
     	List<Provider> providers = tourGuideService.getTripDeals(getUser(userName));
-    	return JsonStream.serialize(providers);
+        if (providers == null)
+            return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(providers);
     }
     
     private User getUser(String userName) {

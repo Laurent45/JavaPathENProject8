@@ -5,9 +5,16 @@ services:
     build: ~/Dev/OC/P8_gpsUtil/
     ports:
       - "127.0.0.1:8081:8080"
+
   reward-central:
     container_name: rewardCentral
     build: ~/Dev/OC/P8_rewardCentral/
     ports:
       - "127.0.0.1:8082:8080"
+
+  trip-pricer:
+    container_name: tripPricer
+    build: ~/Dev/OC/P8_tripPricer/
+    ports:
+      - "127.0.0.1:8083:8080"
 
