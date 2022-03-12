@@ -1,7 +1,7 @@
-package tourGuide.dto;
+package tour_guide.dto;
 
 
-import tourGuide.model.gpsUtil.Location;
+import tour_guide.model.gps_util.Location;
 
 public class NearByAttractionDTO {
 

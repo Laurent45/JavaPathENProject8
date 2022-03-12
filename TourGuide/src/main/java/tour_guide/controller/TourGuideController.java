@@ -1,16 +1,16 @@
-package tourGuide.controller;
+package tour_guide.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import tourGuide.dto.UserNearestAttractionDTO;
-import tourGuide.model.gpsUtil.Location;
-import tourGuide.model.gpsUtil.VisitedLocation;
-import tourGuide.model.tripPricer.Provider;
-import tourGuide.model.user.User;
-import tourGuide.model.user.UserReward;
-import tourGuide.service.TourGuideService;
+import tour_guide.dto.UserNearestAttractionDTO;
+import tour_guide.model.gps_util.Location;
+import tour_guide.model.gps_util.VisitedLocation;
+import tour_guide.model.trip_pricer.Provider;
+import tour_guide.model.user.User;
+import tour_guide.model.user.UserReward;
+import tour_guide.service.TourGuideService;
 
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package tourGuide.model.gpsUtil;
+package tour_guide.model.gps_util;
 
 import java.util.UUID;
 

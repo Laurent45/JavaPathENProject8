@@ -3,13 +3,13 @@ package microservices;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import tourGuide.model.gpsUtil.Attraction;
-import tourGuide.model.gpsUtil.VisitedLocation;
+import tour_guide.model.gps_util.Attraction;
+import tour_guide.model.gps_util.VisitedLocation;
 
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "gpsUtil", url = "http://localhost:8081/api/v1/gpsUtil/")
+@FeignClient(name = "gpsutil", url = "http://gpsutil:8080/api/v1/gpsUtil/")
 public interface GpsUtilService {
 
     @GetMapping("userLocation/{userId}")

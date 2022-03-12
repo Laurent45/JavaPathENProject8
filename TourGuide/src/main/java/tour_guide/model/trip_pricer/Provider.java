@@ -1,4 +1,4 @@
-package tourGuide.model.tripPricer;
+package tour_guide.model.trip_pricer;
 
 import java.util.UUID;
 

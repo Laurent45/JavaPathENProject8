@@ -1,5 +1,5 @@
 
 FROM adoptopenjdk:8
-ARG JAR_FILE=build/libs/P8_rewardCentral-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} rewardCentral.jar
-ENTRYPOINT ["java","-jar","/rewardCentral.jar"]
+ARG JAR_FILE=build/libs/tour_guide-1.0.0.jar
+COPY ${JAR_FILE} tour_guide.jar
+ENTRYPOINT ["java","-jar","/tour_guide.jar"]

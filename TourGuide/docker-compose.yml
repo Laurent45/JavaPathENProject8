@@ -1,20 +1,27 @@
 version: "3"
 services:
-  gps-util:
-    container_name: gpsUtil
-    build: ~/Dev/OC/P8_gpsUtil/
+  gpsutil:
+    container_name: gpsutil
+    image: gpsutil:latest
     ports:
-      - "127.0.0.1:8081:8080"
+      - "8081:8080"
 
   reward-central:
     container_name: rewardCentral
-    build: ~/Dev/OC/P8_rewardCentral/
+    image: rewardcentral:latest
     ports:
-      - "127.0.0.1:8082:8080"
+      - "8082:8080"
 
   trip-pricer:
     container_name: tripPricer
-    build: ~/Dev/OC/P8_tripPricer/
+    image: trippricer:latest
     ports:
-      - "127.0.0.1:8083:8080"
+      - "8083:8080"
+
+  tour-guide:
+    container_name: tourGuide
+    build: .
+    ports:
+      - "8080:8080"
+
 
