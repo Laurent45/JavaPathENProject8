@@ -23,9 +23,9 @@ public class RewardsService {
     private static final int NUMBER_OF_THREAD = 1000;
 
     // proximity in miles
-    private int defaultProximityBuffer = 10;
-    private int proximityBuffer = defaultProximityBuffer;
-    private int attractionProximityRange = 200;
+    private static final int DEFAULT_PROXIMITY_BUFFER = 10;
+    private static final int ATTRACTION_PROXIMITY_RANGE = 200;
+    private int proximityBuffer = DEFAULT_PROXIMITY_BUFFER;
     private final GpsUtilService gpsUtil;
     private final RewardCentralService rewardsCentral;
 
@@ -40,7 +40,7 @@ public class RewardsService {
     }
 
     public void setDefaultProximityBuffer() {
-        proximityBuffer = defaultProximityBuffer;
+        proximityBuffer = DEFAULT_PROXIMITY_BUFFER;
     }
 
     public void calculateRewards(User user) {
@@ -83,7 +83,7 @@ public class RewardsService {
     }
 
     public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
-        return getDistance(attraction, location) > attractionProximityRange ? false : true;
+        return getDistance(attraction, location) > ATTRACTION_PROXIMITY_RANGE ? false : true;
     }
 
     private boolean nearAttraction(VisitedLocation visitedLocation, Attraction attraction) {

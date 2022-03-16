@@ -1,34 +1,44 @@
 package tour_guide;
 
-import static org.junit.Assert.*;
+import container.MSTestContainer;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
+import tour_guide.helper.InternalTestHelper;
+import tour_guide.model.gps_util.Attraction;
+import tour_guide.model.gps_util.VisitedLocation;
+import tour_guide.model.user.User;
+import tour_guide.model.user.UserReward;
+import tour_guide.service.RewardsService;
+import tour_guide.service.TourGuideService;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import tour_guide.helper.InternalTestHelper;
-import tour_guide.model.gps_util.Attraction;
-import tour_guide.model.gps_util.VisitedLocation;
-import tour_guide.service.RewardsService;
-import tour_guide.service.TourGuideService;
-import tour_guide.model.user.User;
-import tour_guide.model.user.UserReward;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@TestPropertySource(locations = "/application-test.properties")
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class TestRewardsService {
 
 	@Autowired
 	private TourGuideService tourGuideService;
 	@Autowired
 	private RewardsService rewardsService;
+
+	@ClassRule
+	public static MSTestContainer msTestContainer =
+			MSTestContainer.getInstance();
 
 	@BeforeClass
 	public static void beforeClass() {

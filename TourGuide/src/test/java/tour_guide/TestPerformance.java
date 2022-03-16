@@ -1,11 +1,15 @@
 package tour_guide;
 
+import container.MSTestContainer;
 import org.apache.commons.lang3.time.StopWatch;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import tour_guide.helper.InternalTestHelper;
 import tour_guide.model.gps_util.Attraction;
@@ -19,15 +23,22 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@TestPropertySource(locations = "/application-test.properties")
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class TestPerformance {
 
 	@Autowired
 	TourGuideService tourGuideService;
 	@Autowired
 	RewardsService rewardsService;
+
+	@ClassRule
+	public static MSTestContainer msTestContainer =
+			MSTestContainer.getInstance();
 
 	@BeforeClass
 	public static void beforeClass() {

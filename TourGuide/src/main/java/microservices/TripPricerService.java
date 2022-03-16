@@ -8,8 +8,7 @@ import tour_guide.model.trip_pricer.Provider;
 
 import java.util.List;
 
-@FeignClient(name = "tripPricer", url = "http://tripPricer:8083/api/v1" +
-        "/tripPricer/")
+@FeignClient(name = "tripPricer", url = "{trippricer}")
 public interface TripPricerService {
 
     @GetMapping("/getPrice")
@@ -23,6 +22,6 @@ public interface TripPricerService {
     );
 
     @GetMapping("/getProviderName")
-    public ResponseEntity<String> getProviderName(@RequestParam String apiKey
+    ResponseEntity<String> getProviderName(@RequestParam String apiKey
             , @RequestParam int adults);
 }

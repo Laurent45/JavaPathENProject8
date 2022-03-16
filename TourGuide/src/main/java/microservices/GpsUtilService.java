@@ -9,7 +9,7 @@ import tour_guide.model.gps_util.VisitedLocation;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "gpsutil", url = "http://gpsutil:8080/api/v1/gpsUtil/")
+@FeignClient(name = "gpsutil", url = "${gpsutil}")
 public interface GpsUtilService {
 
     @GetMapping("userLocation/{userId}")

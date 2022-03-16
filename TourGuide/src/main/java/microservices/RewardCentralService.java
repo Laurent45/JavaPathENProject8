@@ -5,8 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "rewardCentral", url = "http://rewardCentral:8082/api/v1" +
-        "/rewardCentral/")
+@FeignClient(name = "rewardCentral", url = "${rewardcentral}")
 public interface RewardCentralService {
 
     @GetMapping("/attractionRewardPoints")

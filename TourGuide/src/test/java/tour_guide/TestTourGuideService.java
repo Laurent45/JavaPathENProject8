@@ -1,34 +1,43 @@
 package tour_guide;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-import java.util.UUID;
-
+import container.MSTestContainer;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
-
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import tour_guide.dto.UserNearestAttractionDTO;
 import tour_guide.helper.InternalTestHelper;
 import tour_guide.model.gps_util.VisitedLocation;
 import tour_guide.model.trip_pricer.Provider;
-import tour_guide.service.TourGuideService;
 import tour_guide.model.user.User;
+import tour_guide.service.TourGuideService;
 
-@SpringBootTest()
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode;
+
+@SpringBootTest
 @RunWith(SpringRunner.class)
+@TestPropertySource(locations = "/application-test.properties")
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class TestTourGuideService {
 
 	@Autowired
 	private TourGuideService tourGuideService;
 
+	@ClassRule
+	public static MSTestContainer msTestContainer =
+			MSTestContainer.getInstance();
+
 	@BeforeClass
-	public static void avoidCreateUser() {
+	public static void beforeClass() {
 		InternalTestHelper.setInternalUserNumber(0);
 	}
 
