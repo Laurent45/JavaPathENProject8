@@ -37,8 +37,7 @@ dependencies {
 	compile group: 'com.jsoniter', name: 'jsoniter', version: '0.9.23'
 
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.1'
-
-    implementation files('libs/TripPricer.jar')
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
     
     testCompile("junit:junit")
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.6.RELEASE'

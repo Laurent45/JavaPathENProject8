@@ -1,0 +1,9 @@
+[submodule "MicroService_TripPricer_P8"]
+	path = MicroService_TripPricer_P8
+	url = https://github.com/Laurent45/MicroService_TripPricer_P8.git
+[submodule "MicroService_GPSUtil_P8"]
+	path = MicroService_GPSUtil_P8
+	url = https://github.com/Laurent45/MicroService_GPSUtil_P8.git
+[submodule "MicroService_RewardCentral_P8"]
+	path = MicroService_RewardCentral_P8
+	url = https://github.com/Laurent45/MicroService_RewardCentral_P8.git

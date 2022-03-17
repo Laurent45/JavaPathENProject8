@@ -8,7 +8,7 @@ import tour_guide.model.trip_pricer.Provider;
 
 import java.util.List;
 
-@FeignClient(name = "tripPricer", url = "{trippricer}")
+@FeignClient(name = "tripPricer", url = "${trippricer}")
 public interface TripPricerService {
 
     @GetMapping("/getPrice")

@@ -42,7 +42,7 @@ public class TestPerformance {
 
 	@BeforeClass
 	public static void beforeClass() {
-		InternalTestHelper.setInternalUserNumber(100000);
+		InternalTestHelper.setInternalUserNumber(100);
 	}
 
 	/*

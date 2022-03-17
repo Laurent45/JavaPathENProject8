@@ -25,7 +25,6 @@ public class RewardsService {
     // proximity in miles
     private static final int DEFAULT_PROXIMITY_BUFFER = 10;
     private static final int ATTRACTION_PROXIMITY_RANGE = 200;
-    private int proximityBuffer = DEFAULT_PROXIMITY_BUFFER;
     private final GpsUtilService gpsUtil;
     private final RewardCentralService rewardsCentral;
 
@@ -33,14 +32,6 @@ public class RewardsService {
                           RewardCentralService rewardCentral) {
         this.gpsUtil = gpsUtil;
         this.rewardsCentral = rewardCentral;
-    }
-
-    public void setProximityBuffer(int proximityBuffer) {
-        this.proximityBuffer = proximityBuffer;
-    }
-
-    public void setDefaultProximityBuffer() {
-        proximityBuffer = DEFAULT_PROXIMITY_BUFFER;
     }
 
     public void calculateRewards(User user) {
@@ -87,7 +78,8 @@ public class RewardsService {
     }
 
     private boolean nearAttraction(VisitedLocation visitedLocation, Attraction attraction) {
-        return getDistance(attraction, visitedLocation.location) > proximityBuffer ? false : true;
+        return getDistance(attraction, visitedLocation.location) > DEFAULT_PROXIMITY_BUFFER ? false
+                : true;
     }
 
     public int getRewardPoints(Attraction attraction, User user) {
