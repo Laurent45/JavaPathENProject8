@@ -76,6 +76,27 @@ public class TourGuideService {
         }
     }
 
+    public User updateUserPreferences(String userName,
+                                      UserPreferences preferences) {
+        User user = getUser(userName);
+        if (user == null) {
+            return null;
+        }
+        if (preferences.getNumberOfAdults() >= 0) {
+            user.getUserPreferences().setNumberOfAdults(preferences.getNumberOfAdults());
+        }
+        if (preferences.getNumberOfChildren() >= 0) {
+            user.getUserPreferences().setNumberOfChildren(preferences.getNumberOfChildren());
+        }
+        if (preferences.getTripDuration() >= 0) {
+            user.getUserPreferences().setTripDuration(preferences.getTripDuration());
+        }
+        if (preferences.getTicketQuantity() >= 0) {
+            user.getUserPreferences().setTicketQuantity(preferences.getTicketQuantity());
+        }
+        return user;
+    }
+
     public List<Provider> getTripDeals(User user) {
         int cumulativeRewardPoints = user.getUserRewards().stream().mapToInt(UserReward::getRewardPoints).sum();
         List<Provider> providers = tripPricer.getPrice(TRIP_PRICER_API_KEY, String.valueOf(user.getUserId()), user.getUserPreferences().getNumberOfAdults(),

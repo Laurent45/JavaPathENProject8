@@ -56,6 +56,15 @@ jacocoTestReport {
         csv.enabled false
         html.destination file("${buildDir}/jacocoHtml")
     }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "TourGuide/src/main/java/tour_guide/model/**",
+                    "TourGuide/src/main/java/tour_guide/dto/**"
+
+            ])
+        }))
+    }
 }
 
 test.finalizedBy jacocoTestReport

@@ -74,12 +74,19 @@ public class RewardsService {
     }
 
     public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
-        return getDistance(attraction, location) > ATTRACTION_PROXIMITY_RANGE ? false : true;
+        if (getDistance(attraction, location) > ATTRACTION_PROXIMITY_RANGE) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private boolean nearAttraction(VisitedLocation visitedLocation, Attraction attraction) {
-        return getDistance(attraction, visitedLocation.location) > DEFAULT_PROXIMITY_BUFFER ? false
-                : true;
+        if (getDistance(attraction, visitedLocation.location) > DEFAULT_PROXIMITY_BUFFER) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public int getRewardPoints(Attraction attraction, User user) {

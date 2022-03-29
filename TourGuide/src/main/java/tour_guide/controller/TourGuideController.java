@@ -1,14 +1,13 @@
 package tour_guide.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tour_guide.dto.UserNearestAttractionDTO;
 import tour_guide.model.gps_util.Location;
 import tour_guide.model.gps_util.VisitedLocation;
 import tour_guide.model.trip_pricer.Provider;
 import tour_guide.model.user.User;
+import tour_guide.model.user.UserPreferences;
 import tour_guide.model.user.UserReward;
 import tour_guide.service.TourGuideService;
 
@@ -31,14 +30,21 @@ public class TourGuideController {
     }
     
     @RequestMapping("/getLocation") 
-    public Location getLocation(@RequestParam String userName) {
-    	VisitedLocation visitedLocation = tourGuideService.getUserLocation(getUser(userName));
-		return visitedLocation.location;
+    public ResponseEntity<Location> getLocation(@RequestParam String userName) {
+        User user = getUser(userName);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+    	VisitedLocation visitedLocation = tourGuideService.getUserLocation(user);
+        return ResponseEntity.ok(visitedLocation.location);
     }
 
     @RequestMapping("/getNearbyAttractions") 
     public ResponseEntity<UserNearestAttractionDTO> getNearbyAttractions(@RequestParam String userName) {
     	User user = getUser(userName);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(tourGuideService.getNearByAttractions(user));
     }
     
@@ -58,6 +64,17 @@ public class TourGuideController {
         if (providers == null)
             return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(providers);
+    }
+
+    @PutMapping("/updatePreferences")
+    public ResponseEntity<User> updateUserPreferences(@RequestParam("userName") String userName,
+                                                      @RequestBody UserPreferences preferences) {
+        User userPreferencesUpdated =
+                tourGuideService.updateUserPreferences(userName, preferences);
+        if (userPreferencesUpdated == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userPreferencesUpdated);
     }
     
     private User getUser(String userName) {
